@@ -1,36 +1,36 @@
 "use strict";
 
-// BTree //
+// TreeMap //
 
-function BTree() {
+function TreeMap() {
     this.root = null;
 }
 
-BTree.prototype.get = function(key) {
+TreeMap.prototype.get = function(key) {
     if (this.root == null) return null;
     return this.root.get(key);
 };
 
-BTree.prototype.put = function(key, value) {
+TreeMap.prototype.put = function(key, value) {
     if (this.root == null) {
-        this.root = new BTreeNode(key, value);
+        this.root = new TreeMapNode(key, value);
     } else {
         this.root.put(key, value);
     }
 };
-BTree.prototype.depth = function() {
+TreeMap.prototype.depth = function() {
     if (this.root == null) return 0;
     return this.root.depth();
 };
 
-BTree.prototype.print = function() {
+TreeMap.prototype.print = function() {
     if (this.root == null) return;
     this.root.print(0);
 };
 
 // BTreeNode //
 
-function BTreeNode(key, value) {
+function TreeMapNode(key, value) {
     this.left = null;
     this.right = null;
     this.key = key;
@@ -39,7 +39,7 @@ function BTreeNode(key, value) {
 
 // internal function that returns either the node whose key equals key, if it exists, or otherwise
 // the node which would be the parent of such a node
-BTreeNode.prototype.locate = function(key) {
+TreeMapNode.prototype.locate = function(key) {
     if (this.key === key) {
         return this;
     } else {
@@ -59,7 +59,7 @@ BTreeNode.prototype.locate = function(key) {
     }
 };
 
-BTreeNode.prototype.get = function(key) {
+TreeMapNode.prototype.get = function(key) {
     let node = this.locate(key);
     if (node.key === key) {
         return node.value;
@@ -69,7 +69,7 @@ BTreeNode.prototype.get = function(key) {
 
 };
 
-BTreeNode.prototype.put = function(key, value) {
+TreeMapNode.prototype.put = function(key, value) {
     let node = this.locate(key);
     // node is now either a node where node.key == key, or the node on which
     // a new node holding key and value is to be added as either left or right
@@ -77,24 +77,24 @@ BTreeNode.prototype.put = function(key, value) {
         node.value = value;
     } else {
         if (key < node.key) {
-            node.left = new BTreeNode(key, value);
+            node.left = new TreeMapNode(key, value);
         } else {
-            node.right = new BTreeNode(key, value);
+            node.right = new TreeMapNode(key, value);
         }
     }
 };
 
-BTreeNode.prototype.depth = function() {
+TreeMapNode.prototype.depth = function() {
     let leftDepth = (this.left == null ? 0 : this.left.depth());
     let rightDepth = (this.right == null ? 0 : this.right.depth());
     return 1 + Math.max(leftDepth, rightDepth);
 };
 
-BTreeNode.prototype.print = function() {
+TreeMapNode.prototype.print = function() {
     this.printRecursive("", true);
 };
 
-BTreeNode.prototype.printRecursive = function(prefix, lastSibling) {
+TreeMapNode.prototype.printRecursive = function(prefix, lastSibling) {
     console.log(prefix + "○ " + this.key + " --> " + this.value);
     let childPrefix = prefix;
     if (!lastSibling) {
@@ -110,4 +110,4 @@ BTreeNode.prototype.printRecursive = function(prefix, lastSibling) {
     }
 };
 
-module.exports = BTree;
+module.exports = TreeMap;
